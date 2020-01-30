@@ -6,9 +6,11 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content fullscreen>
-  <ion-slides #slides (ionSlideWillChange)="onSlideChangeStart($event)" pager="false">
+<!--<ion-content>-->
+  <ion-slides #slides (ionSlideWillChange)="onSlideChangeStart($event)" pager="false" class="slider">
     <ion-slide>
+      <ion-content>
+        <ion-button (click)="switchSwipe()" >{{swipe?'enable':'disable'}} Swiping</ion-button>
       <img src="assets/img/ica-slidebox-img-1.png" class="slide-image" />
       <h2 class="slide-title">
         Welcome to
@@ -19,6 +21,26 @@
         <b>ionic conference app</b> is a practical preview of the ionic framework in action, and a demonstration of proper code
         use.
       </p>
+      <ion-card *ngFor="let troll of loadedTrolls; index as i  ">
+        <ion-card-header>
+          <ion-card-subtitle>Troll {{ i }}</ion-card-subtitle>
+        </ion-card-header>
+
+        <ion-card-content>
+          Keep close to troll...
+        </ion-card-content>
+      </ion-card>
+
+        <ion-infinite-scroll
+          threshold="10%"
+          (ionInfinite)="fetchMore($event)"
+        >
+          <ion-infinite-scroll-content
+            class="vi-spinner"
+            loadingSpinner="crescent"
+          ></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+      </ion-content>
     </ion-slide>
 
     <ion-slide>
@@ -46,4 +68,4 @@
       </ion-button>
     </ion-slide>
   </ion-slides>
-</ion-content>
+<!--</ion-content>-->

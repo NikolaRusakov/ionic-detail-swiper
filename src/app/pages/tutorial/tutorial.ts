@@ -1,9 +1,9 @@
-import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
+import {Component, ViewChild, ViewEncapsulation} from '@angular/core';
+import {Router} from '@angular/router';
 
-import { MenuController, IonSlides } from '@ionic/angular';
+import {MenuController, IonSlides, IonInfiniteScroll} from '@ionic/angular';
 
-import { Storage } from '@ionic/storage';
+import {Storage} from '@ionic/storage';
 
 @Component({
   selector: 'page-tutorial',
@@ -12,14 +12,33 @@ import { Storage } from '@ionic/storage';
 })
 export class TutorialPage {
   showSkip = true;
+  swipe = false;
+  @ViewChild(IonSlides, {static: true}) slides: IonSlides;
 
-  @ViewChild('slides', { static: true }) slides: IonSlides;
+  // @ViewChild('slides', {static: true}) slides: IonSlides;
+  trolls = [
+    {url: 'https://research.pomona.edu/itsecurity/files/2014/11/Troll.jpg'},
+    {url: 'https://research.pomona.edu/itsecurity/files/2014/11/Troll.jpg'},
+    {url: 'https://research.pomona.edu/itsecurity/files/2014/11/Troll.jpg'},
+    {url: 'https://research.pomona.edu/itsecurity/files/2014/11/Troll.jpg'},
+    {url: 'https://research.pomona.edu/itsecurity/files/2014/11/Troll.jpg'},
+    {url: 'https://research.pomona.edu/itsecurity/files/2014/11/Troll.jpg'},
+    {url: 'https://research.pomona.edu/itsecurity/files/2014/11/Troll.jpg'},
+    {url: 'https://research.pomona.edu/itsecurity/files/2014/11/Troll.jpg'},
+    {url: 'https://research.pomona.edu/itsecurity/files/2014/11/Troll.jpg'},
+    {url: 'https://research.pomona.edu/itsecurity/files/2014/11/Troll.jpg'},
+    {url: 'https://research.pomona.edu/itsecurity/files/2014/11/Troll.jpg'},
+  ];
+
+  loadedTrolls = [...this.trolls];
+
 
   constructor(
     public menu: MenuController,
     public router: Router,
     public storage: Storage
-  ) {}
+  ) {
+  }
 
   startApp() {
     this.router
@@ -46,5 +65,16 @@ export class TutorialPage {
   ionViewDidLeave() {
     // enable the root left menu when leaving the tutorial page
     this.menu.enable(true);
+  }
+
+  fetchMore(event: CustomEvent): void {
+    this.loadedTrolls = [...this.loadedTrolls, ...this.trolls];
+    setTimeout(() =>
+      ((event.target as unknown) as IonInfiniteScroll).complete(), 500);
+  }
+
+  async switchSwipe()  {
+    this.swipe = !this.swipe;
+    return this.slides.lockSwipes(this.swipe);
   }
 }
